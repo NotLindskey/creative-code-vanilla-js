@@ -5,23 +5,28 @@ window.addEventListener('load', function () {
   canvas.height = 600;
   // canvas settings
   console.log(ctx);
-  ctx.lineWidth = 30;
+  ctx.lineWidth = 10;
   ctx.lineCap = 'round';
-  ctx.strokeStyle = 'green';
   ctx.fillStyle = 'blue';
+  ctx.shadowColor = 'black';
+  ctx.shadowOffsetY = 10;
+  ctx.shadowOffsetX = 5;
+  ctx.shadowBlur = 10;
 
   class Fractal {
     constructor(canvasWidth, canvasHeight) {
       this.canvasWidth = canvasWidth;
       this.canvasHeight = canvasHeight;
-      this.size = this.canvasWidth * 0.3;
+      this.size = this.canvasWidth * 0.25;
       this.sides = 6;
-      this.maxLevel = 3;
+      this.maxLevel = 4;
       this.scale = 0.5;
-      this.spread = 1;
+      this.spread = Math.random() * 2.8 + 0.1;
       this.branches = 2;
+      this.color = 'hsl(' + Math.random() * 360 + ', 100%, 50%)';
     }
     draw(context) {
+      context.strokeStyle = this.color;
       context.save();
       context.translate(this.canvasWidth / 2, this.canvasHeight / 2);
       context.scale(1, 1);
