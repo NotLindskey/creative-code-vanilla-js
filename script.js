@@ -1,8 +1,8 @@
 window.addEventListener('load', function () {
   const canvas = document.getElementById('canvas1');
   const ctx = canvas.getContext('2d');
-  canvas.width = 600;
-  canvas.height = 600;
+  canvas.width = 800;
+  canvas.height = 800;
   // canvas settings
   console.log(ctx);
   ctx.lineWidth = 10;
@@ -24,7 +24,7 @@ window.addEventListener('load', function () {
       this.canvasHeight = canvasHeight;
       this.size = this.canvasWidth * 0.25;
       this.sides = 6;
-      this.maxLevel = 4;
+      this.maxLevel = 5;
       this.scale = 0.5;
       this.spread = Math.random() * 2.8 + 0.1;
       this.branches = 2;
@@ -32,6 +32,7 @@ window.addEventListener('load', function () {
     }
     draw(context) {
       context.strokeStyle = this.color;
+      context.fillStyle = this.color;
       context.save();
       context.translate(this.canvasWidth / 2, this.canvasHeight / 2);
       context.scale(1, 1);
@@ -49,6 +50,11 @@ window.addEventListener('load', function () {
       context.lineTo(this.size, 0);
       context.stroke();
 
+      context.beginPath();
+      context.arc(this.size * 1.5, 0, 50, 0, Math.PI * 2);
+      context.fill();
+      context.strokeRect(this.size * 1.2, 0, 30, 150);
+
       for (let i = 0; i < this.branches; i++) {
         context.save();
         context.translate(this.size - (this.size / this.branches) * i, 0);
@@ -56,11 +62,6 @@ window.addEventListener('load', function () {
 
         context.save();
         context.rotate(this.spread);
-        this.#drawLine(context, level + 1);
-        context.restore();
-
-        context.save();
-        context.rotate(-this.spread);
         this.#drawLine(context, level + 1);
         context.restore();
 
@@ -80,15 +81,28 @@ window.addEventListener('load', function () {
       this.width = this.image.width * this.sizeModifier;
       this.height = this.image.height * this.sizeModifier;
       this.speed = Math.random() * 1 + 0.2;
+      this.angle = 0;
+      this.va = Math.random() * 0.01 - 0.005;
     }
     update() {
+      this.angle += this.va;
       this.x += this.speed;
       if (this.x > this.canvasWidth + this.width) this.x = -this.width;
       this.y += this.speed;
       if (this.y > this.canvasHeight + this.height) this.y = -this.height;
     }
     draw(context) {
-      context.drawImage(this.image, this.x, this.y, this.width, this.height);
+      context.save();
+      context.translate(this.x, this.y);
+      context.rotate(this.angle);
+      context.drawImage(
+        this.image,
+        -this.width / 2,
+        -this.height / 2,
+        this.width,
+        this.height
+      );
+      context.restore();
     }
   }
 
@@ -97,7 +111,7 @@ window.addEventListener('load', function () {
       this.canvasWidth = canvasWidth;
       this.canvasHeight = canvasHeight;
       this.image = image;
-      this.numberOfParticles = 20;
+      this.numberOfParticles = 10;
       this.particles = [];
       this.#initialize();
     }
