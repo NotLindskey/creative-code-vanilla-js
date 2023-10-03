@@ -8,19 +8,27 @@ window.addEventListener('load', function () {
   ctx.lineWidth = 50;
   ctx.lineCap = 'round';
   ctx.strokeStyle = 'green';
-  ctx.fillStyle='blue'
+  ctx.fillStyle = 'blue';
 
   class Fractal {
     constructor(canvasWidth, canvasHeight) {
       this.canvasWidth = canvasWidth;
       this.canvasHeight = canvasHeight;
       this.size = this.canvasWidth * 0.4;
+      this.sides = 6;
     }
     draw(context) {
-      context.translate(this.canvasWidth/2, this.canvasHeight/2);
-      context.scale(0.5, 0.5);
-      context.rotate(0)
-      context.fillRect(0, 0, this.canvasWidth, this.canvasHeight);
+      context.save();
+      context.translate(this.canvasWidth / 2, this.canvasHeight / 2);
+      context.scale(1, 1);
+      context.rotate(0);
+      for (let i = 0; i < this.sides; i++) {
+        this.#drawLine(context);
+        context.rotate((Math.PI *2)/this.sides);
+      }
+      context.restore();
+    }
+    #drawLine(context) {
       context.beginPath();
       context.moveTo(0, 0);
       context.lineTo(this.size, 0);
