@@ -7,4 +7,6 @@ Exploring what can be done with vanilla js.
 
 Visit the final results: https://notlindskey.github.io/creative-code-vanilla-js/
 
+- Refresh the page to see a new pattern!
+
 Copyright (c) 2023 Linssi Colin Ruiz
