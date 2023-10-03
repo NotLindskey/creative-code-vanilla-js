@@ -67,7 +67,51 @@ window.addEventListener('load', function () {
   const fractal1 = new Fractal(canvas.width, canvas.height);
   fractal1.draw(ctx);
 
-  class Particle {}
+  class Particle {
+    constructor(canvasWidth, canvasHeight) {
+      this.canvasWidth = canvasWidth;
+      this.canvasHeight = canvasHeight;
+      this.x = Math.random() * this.canvasWidth;
+      this.y = Math.random() * this.canvasHeight;
+      this.width = 50;
+      this.height = 50;
+    }
+    update() {
+      this.x++;
+      this.y++;
+    }
+    draw(context) {
+      context.fillRect(this.x, this.y, this.width, this.height);
+    }
+  }
 
-  class Rain {}
+  class Rain {
+    constructor(canvasWidth, canvasHeight) {
+      this.canvasWidth = canvasWidth;
+      this.canvasHeight = canvasHeight;
+      this.numberOfParticles = 20;
+      this.particles = [];
+      this.#initialize();
+    }
+
+    #initialize() {
+      for (let i = 0; i < this.numberOfParticles; i++) {
+        this.particles.push(new Particle(this.canvasWidth, this.canvasHeight));
+      }
+    }
+    run(context) {
+      this.particles.forEach((particle) => {
+        particle.draw(context);
+        particle.update();
+      });
+    }
+  }
+  const rainEffect = new Rain(canvas.width, canvas.height);
+  console.log(rainEffect);
+
+  function animate() {
+    rainEffect.run(ctx);
+    requestAnimationFrame(animate);
+  }
+  animate();
 });
