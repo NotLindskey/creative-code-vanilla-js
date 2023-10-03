@@ -17,6 +17,9 @@ window.addEventListener('load', function () {
       this.size = this.canvasWidth * 0.4;
     }
     draw(context) {
+      context.translate(this.canvasWidth/2, this.canvasHeight/2);
+      context.scale(0.5, 0.5);
+      context.rotate(0)
       context.fillRect(0, 0, this.canvasWidth, this.canvasHeight);
       context.beginPath();
       context.moveTo(0, 0);
