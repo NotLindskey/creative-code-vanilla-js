@@ -69,31 +69,34 @@ window.addEventListener('load', function () {
     }
   }
 
-  const fractal1 = new Fractal(canvas.width, canvas.height);
-  fractal1.draw(ctx);
-
   class Particle {
-    constructor(canvasWidth, canvasHeight) {
+    constructor(canvasWidth, canvasHeight, image) {
       this.canvasWidth = canvasWidth;
       this.canvasHeight = canvasHeight;
+      this.image = image;
       this.x = Math.random() * this.canvasWidth;
       this.y = Math.random() * this.canvasHeight;
-      this.width = 50;
-      this.height = 50;
+      this.sizeModifier = Math.random() * 0.5 + 0.1;
+      this.width = this.image.width * this.sizeModifier;
+      this.height = this.image.height * this.sizeModifier;
+      this.speed = Math.random() * 1 + 0.2;
     }
     update() {
-      this.x++;
-      this.y++;
+      this.x += this.speed;
+      if (this.x > this.canvasWidth + this.width) this.x = -this.width;
+      this.y += this.speed;
+      if (this.y > this.canvasHeight + this.height) this.y = -this.height;
     }
     draw(context) {
-      context.fillRect(this.x, this.y, this.width, this.height);
+      context.drawImage(this.image, this.x, this.y, this.width, this.height);
     }
   }
 
   class Rain {
-    constructor(canvasWidth, canvasHeight) {
+    constructor(canvasWidth, canvasHeight, image) {
       this.canvasWidth = canvasWidth;
       this.canvasHeight = canvasHeight;
+      this.image = image;
       this.numberOfParticles = 20;
       this.particles = [];
       this.#initialize();
@@ -101,7 +104,9 @@ window.addEventListener('load', function () {
 
     #initialize() {
       for (let i = 0; i < this.numberOfParticles; i++) {
-        this.particles.push(new Particle(this.canvasWidth, this.canvasHeight));
+        this.particles.push(
+          new Particle(this.canvasWidth, this.canvasHeight, this.image)
+        );
       }
     }
     run(context) {
@@ -111,13 +116,20 @@ window.addEventListener('load', function () {
       });
     }
   }
-  const rainEffect = new Rain(canvas2.width, canvas2.height);
-  console.log(rainEffect);
 
-  function animate() {
-    ctx2.clearRect(0, 0, canvas2.width, canvas2.height);
-    rainEffect.run(ctx2);
-    requestAnimationFrame(animate);
-  }
-  animate();
+  const fractal1 = new Fractal(canvas.width, canvas.height);
+  fractal1.draw(ctx);
+  const fractalImage = new Image();
+  fractalImage.src = canvas.toDataURL();
+
+  fractalImage.onload = function () {
+    const rainEffect = new Rain(canvas2.width, canvas2.height, fractalImage);
+
+    function animate() {
+      ctx2.clearRect(0, 0, canvas2.width, canvas2.height);
+      rainEffect.run(ctx2);
+      requestAnimationFrame(animate);
+    }
+    animate();
+  };
 });
