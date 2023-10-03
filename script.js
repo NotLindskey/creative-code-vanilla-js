@@ -14,8 +14,9 @@ window.addEventListener('load', function () {
     constructor(canvasWidth, canvasHeight) {
       this.canvasWidth = canvasWidth;
       this.canvasHeight = canvasHeight;
-      this.size = this.canvasWidth * 0.4;
-      this.sides = 6;
+      this.size = this.canvasWidth * 0.3;
+      this.sides = 1;
+      this.maxLevel = 1;
     }
     draw(context) {
       context.save();
@@ -23,16 +24,23 @@ window.addEventListener('load', function () {
       context.scale(1, 1);
       context.rotate(0);
       for (let i = 0; i < this.sides; i++) {
-        this.#drawLine(context);
-        context.rotate((Math.PI *2)/this.sides);
+        this.#drawLine(context, 0);
+        context.rotate((Math.PI * 2) / this.sides);
       }
       context.restore();
     }
-    #drawLine(context) {
+    #drawLine(context, level) {
+      if (level > this.maxLevel) return;
       context.beginPath();
       context.moveTo(0, 0);
       context.lineTo(this.size, 0);
       context.stroke();
+      context.save();
+      context.translate(this.size,0)
+      context.scale(0.7, 0.7);
+      context.rotate(0.9);
+      this.#drawLine(context, level + 1);
+      context.restore();
     }
   }
 
