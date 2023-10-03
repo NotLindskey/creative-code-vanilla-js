@@ -1,2 +1,6 @@
 # creative-code-vanilla-js
- Learn Creative Coding with Vanilla JavaScript
+ Learning Creative Coding with Vanilla JavaScript
+
+Making art with code and learn front-end web development.
+
+Exploring what can be done with vanilla js.
